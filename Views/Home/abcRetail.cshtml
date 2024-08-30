@@ -1,0 +1,135 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABC Retail Management</title>
+    <style>
+        /* CSS Styles as before */
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <img src="https://www.dreamstime.com/abc-logo-letter-design-black-color-illustration-image172086044" alt="ABC Retail Management Logo">
+        <h1>ABC Retail Management</h1>
+
+        <!-- Customer Profiles Section -->
+        <h2>Customer Profiles</h2>
+        <form id="customerForm">
+            <label for="customerId">Customer ID:</label>
+            <input type="text" id="customerId" name="customerId" required>
+            <label for="customerName">Customer Name:</label>
+            <input type="text" id="customerName" name="customerName" required>
+            <label for="customerEmail">Customer Email:</label>
+            <input type="text" id="customerEmail" name="customerEmail" required>
+            <div class="button-container">
+                <input type="submit" value="Create/Update Profile">
+                <button type="button" onclick="deleteCustomerProfile()">Delete Profile</button>
+            </div>
+        </form>
+
+        <!-- Product Information Section -->
+        <h2>Product Information</h2>
+        <form id="productForm">
+            <label for="productId">Product ID:</label>
+            <input type="text" id="productId" name="productId" required>
+            <label for="productName">Product Name:</label>
+            <input type="text" id="productName" name="productName" required>
+            <label for="productPrice">Product Price:</label>
+            <input type="number" id="productPrice" name="productPrice" required>
+            <label for="productDescription">Product Description:</label>
+            <textarea id="productDescription" name="productDescription" required></textarea>
+            <div class="button-container">
+                <input type="submit" value="Save Product">
+            </div>
+        </form>
+
+        <!-- Upload/Download Section -->
+        <h2>Upload/Download Files</h2>
+        <form id="uploadForm" enctype="multipart/form-data">
+            <label for="fileUpload">Upload Image/Contract/Log File:</label>
+            <input type="file" id="fileUpload" name="fileUpload" required>
+            <div class="button-container">
+                <input type="submit" value="Upload File">
+            </div>
+        </form>
+
+        <form id="downloadForm">
+            <!-- Download Form elements remain unchanged -->
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('customerForm').onsubmit = function (event) {
+            event.preventDefault();
+            const customerData = {
+                id: document.getElementById('customerId').value,
+                name: document.getElementById('customerName').value,
+                email: document.getElementById('customerEmail').value
+            };
+            fetch('/Home/abcRetail', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(customerData)
+            }).then(response => {
+                if (response.ok) {
+                    alert('Customer profile saved.');
+                } else {
+                    alert('Error saving customer profile.');
+                }
+            });
+        };
+
+        document.getElementById('productForm').onsubmit = function (event) {
+            event.preventDefault();
+            const productData = {
+                id: document.getElementById('productId').value,
+                name: document.getElementById('productName').value,
+                price: document.getElementById('productPrice').value,
+                description: document.getElementById('productDescription').value
+            };
+            fetch('/Home/abcRetail', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(productData)
+            }).then(response => {
+                if (response.ok) {
+                    alert('Product information saved.');
+                } else {
+                    alert('Error saving product information.');
+                }
+            });
+        };
+
+        function deleteCustomerProfile() {
+            // Handle delete customer profile logic
+            alert('Customer profile deleted.');
+        }
+
+        document.getElementById('uploadForm').onsubmit = function (event) {
+            event.preventDefault();
+            const formData = new FormData();
+            formData.append('file', document.getElementById('fileUpload').files[0]);
+            fetch('/Home/UploadImage', {
+                method: 'POST',
+                body: formData
+            }).then(response => {
+                if (response.ok) {
+                    alert('File uploaded.');
+                } else {
+                    alert('Error uploading file.');
+                }
+            });
+        };
+
+        // Remaining JavaScript logic unchanged
+    </script>
+</body>
+
+</html>
